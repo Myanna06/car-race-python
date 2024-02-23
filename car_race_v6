@@ -1,0 +1,155 @@
+import pygame
+import random
+
+# Initialisation de Pygame
+pygame.init()
+
+# Paramètres du jeu
+largeur_fenetre = 800
+hauteur_fenetre = 800
+fenetre = pygame.display.set_mode((largeur_fenetre, hauteur_fenetre))
+pygame.display.set_caption("Course de voitures")
+
+# Couleurs
+blanc = (255, 255, 255)
+noir = (0, 0, 0)
+rouge = (255, 0, 0)
+
+# Classe de la voiture du joueur
+class VoitureJoueur(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        # Chargez l'image de la voiture
+        self.image = pygame.image.load("C:/Users/chemin/vers/image.png").convert_alpha()
+
+        # Redimensionnez l'image à la taille souhaitée (50x50 dans cet exemple)
+        self.image = pygame.transform.scale(self.image, (50, 100))
+
+        self.rect = self.image.get_rect()
+        self.rect.centerx = largeur_fenetre // 2
+        self.rect.bottom = hauteur_fenetre - 20
+        self.vitesse = 5
+
+    def update(self):
+        touches = pygame.key.get_pressed()
+        if touches[pygame.K_LEFT] and self.rect.left > 0:
+            self.rect.x -= self.vitesse
+        if touches[pygame.K_RIGHT] and self.rect.right < largeur_fenetre:
+            self.rect.x += self.vitesse
+
+# Classe des obstacles
+class Obstacle(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        # Liste d'images d'obstacles
+        images_obstacles = ["C:/Users/chemin/vers/image1.png", "C:/Users/chemin/vers/image2.png", "C:/Users/chemin/vers/image3.png"]
+        
+        # Sélectionnez une image aléatoire
+        image_obstacle = random.choice(images_obstacles)
+
+        # Chargez l'image de l'obstacle
+        self.image = pygame.image.load(image_obstacle).convert_alpha()
+
+        # Redimensionnez l'image à la taille souhaitée (50x50 dans cet exemple)
+        self.image = pygame.transform.scale(self.image, (50, 100))
+
+        self.rect = self.image.get_rect()
+        self.rect.x = random.randrange(largeur_fenetre - self.rect.width)
+        self.rect.y = random.randrange(-100, -40)
+        self.vitesse = random.randrange(1, 5)
+
+    def update(self):
+        self.rect.y += self.vitesse
+        if self.rect.y > hauteur_fenetre:
+            self.rect.y = random.randrange(-100, -40)
+            self.rect.x = random.randrange(largeur_fenetre - self.rect.width)
+
+# Groupes de sprites
+tous_les_sprites = pygame.sprite.Group()
+voiture_joueur = VoitureJoueur()
+tous_les_sprites.add(voiture_joueur)
+obstacles = pygame.sprite.Group()
+
+# Chargez l'image du fond
+fond = pygame.image.load("C:/Users/chemin/vers/fond.png").convert()
+fond = pygame.transform.scale(fond, (largeur_fenetre, hauteur_fenetre))
+
+# Chargez la musique de fond
+pygame.mixer.music.load("C:/Users/chemin/vers/fond.mp3")
+pygame.mixer.music.set_volume(0.3)  # Ajuste le volume
+pygame.mixer.music.play(-1)  # -1 pour répéter en boucle, 0 pour jouer une seule fois
+
+# Chargez l'effet sonore de collision
+son_collision = pygame.mixer.Sound("C:/Users/chemin/vers/car-crash.mp3")
+
+# Ajout des obstacles initiaux
+for i in range(8):
+    obstacle = Obstacle()
+    tous_les_sprites.add(obstacle)
+    obstacles.add(obstacle)
+
+# Variables pour le score
+score = 0
+
+# Boucle principale
+continuer = True
+horloge = pygame.time.Clock()
+perdu = False  # Variable pour suivre si le joueur a perdu
+
+while continuer:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            continuer = False
+
+    if not perdu:  # Vérifiez si le joueur n'a pas perdu
+        # Mise à jour des sprites
+        tous_les_sprites.update()
+
+        # Détection des collisions entre la voiture du joueur et les obstacles
+        collisions = pygame.sprite.spritecollide(voiture_joueur, obstacles, True)
+        for collision in collisions:
+            perdu = True  # Le joueur a perdu
+            son_collision.play()  # Joue l'effet sonore de collision
+            # On pourra ajouter une logique de fin de jeu supplémentaire ici si nécessaire
+
+        # Ajout d'un nouvel obstacle après chaque collision
+        for collision in collisions:
+            obstacle = Obstacle()
+            tous_les_sprites.add(obstacle)
+            obstacles.add(obstacle)
+
+        # Incrémenter le score lorsque le joueur évite un obstacle
+        if not collisions:
+            score += 1
+
+    # Affichage
+    fenetre.blit(fond, (0, 0))
+
+    if not perdu:
+        tous_les_sprites.draw(fenetre)
+    else:
+        # Afficher un message de fin de jeu ou effectuer d'autres actions de fin de jeu
+        # Par exemple :
+        font = pygame.font.Font(None, 36)
+        texte = font.render("Partie terminée - Score : {}".format(score), True, rouge)
+        fenetre.blit(texte, (largeur_fenetre // 2 - 200, hauteur_fenetre // 2))
+
+    # Affichage du score en haut de l'écran
+    font = pygame.font.Font(None, 36)
+    texte = font.render("Score : {}".format(score), True, rouge)
+    fenetre.blit(texte, (10, 10))
+
+    # Rafraîchissement de l'écran
+    pygame.display.flip()
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            continuer = False
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_q:
+            continuer = False
+
+    # Limite de rafraîchissement à 60 images par seconde
+    horloge.tick(60)
+
+# Quitter Pygame
+pygame.quit()
