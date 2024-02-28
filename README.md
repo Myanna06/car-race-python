@@ -1,7 +1,7 @@
 # Car race in python
 
 Ce petit projet que j'ai réalisée utilise la bibliothèque Pygame.
-J'ai utiliser la programmation orienté objet pour créer une classe VoitureJour et une classe Ostacle où je les initialise.
+J'ai utiliser la programmation orienté objet pour créer une classe VoitureJoueur et une classe Ostacle où je les initialise.
 
 Le joueur peut contrôler une voiture qui se déplace horizontalement pour éviter des obstacles descendant de l'écran.
 Le score augmente à chaque obstacle évité, mais le jeu se termine si la voiture entre en collision avec un obstacle.
