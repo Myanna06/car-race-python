@@ -9,4 +9,5 @@ Le programme utilise des images pour les véhicules, les obstacles et le fond du
 Il utilise des fichiers audio pour la musique de fond et les effets sonores de collision. 
 
 Voici donc comment il se présente lors du lancement
-![ScreenShot du jeu](![image](https://github.com/Myanna06/car-race-python/assets/154425535/a3bf3a1f-a0ab-45b2-a562-4b8b8e2f1c6e))
+![ScreenShot du jeu](![image](![ScreenShot du jeu](https://github.com/Myanna06/car-race-python/assets/154425535/68bd4a39-8217-4fad-8315-dcb68453ca89)
+))
