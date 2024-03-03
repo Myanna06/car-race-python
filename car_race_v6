@@ -13,7 +13,7 @@ pygame.display.set_caption("Course de voitures")
 # Couleurs
 blanc = (255, 255, 255)
 noir = (0, 0, 0)
-rouge = (255, 0, 0)
+jaune = (255, 254, 148)
 
 # Classe de la voiture du joueur
 class VoitureJoueur(pygame.sprite.Sprite):
@@ -131,12 +131,12 @@ while continuer:
         # Afficher un message de fin de jeu ou effectuer d'autres actions de fin de jeu
         # Par exemple :
         font = pygame.font.Font(None, 36)
-        texte = font.render("Partie terminée - Score : {}".format(score), True, rouge)
+        texte = font.render("Partie terminée - Score : {}".format(score), True, jaune)
         fenetre.blit(texte, (largeur_fenetre // 2 - 200, hauteur_fenetre // 2))
 
     # Affichage du score en haut de l'écran
     font = pygame.font.Font(None, 36)
-    texte = font.render("Score : {}".format(score), True, rouge)
+    texte = font.render("Score : {}".format(score), True, jaune)
     fenetre.blit(texte, (10, 10))
 
     # Rafraîchissement de l'écran
