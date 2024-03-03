@@ -8,5 +8,5 @@ Le score augmente à chaque obstacle évité, mais le jeu se termine si la voitu
 Le programme utilise des images pour les véhicules, les obstacles et le fond du jeu.
 Il utilise des fichiers audio pour la musique de fond et les effets sonores de collision. 
 
-Voici don comment il se présente lors du lancement
+Voici donc comment il se présente lors du lancement
 ![ScreenShot du jeu](![image](https://github.com/Myanna06/car-race-python/assets/154425535/a3bf3a1f-a0ab-45b2-a562-4b8b8e2f1c6e))
